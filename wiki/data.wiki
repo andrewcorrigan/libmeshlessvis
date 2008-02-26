@@ -1,6 +1,4 @@
-#summary Meshless Volume Data Sets for libMeshlesVis
-
-= Data =
+#summary Data sets for libMeshlesVis
 
 This page links to datasets that you can visualize using libMeshlessVis.  If you use these data sets for research purposes, please note the included citation information. 
 
