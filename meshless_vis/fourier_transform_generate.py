@@ -195,7 +195,7 @@ for function_name in fourier_transform.keys():
 """
 {
 	extern __shared__ float shared[];
-	int block_length = fvr_config._fvr_block_length;
+	int block_length = vis_config._fvr_block_length;
 	Constraint* ds_constraints = (Constraint*)shared;
 """)
 		if has_radii: source_file.write('\tfloat* ds_radii = (float*)(ds_constraints + block_length);\n')
