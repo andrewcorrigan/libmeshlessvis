@@ -1,7 +1,7 @@
 #emu := 1
 #dbg := 1
 
-MESHLESS_VIS_PATH := $(HOME)/workspace/meshless_fvr
+MESHLESS_VIS_PATH := $(HOME)/workspace/libmeshlessvis
 CUDA_INSTALL_PATH := /home/acorrigan/cuda
 GLEW_PATH := /usr
 MAGICK_PATH := /usr
