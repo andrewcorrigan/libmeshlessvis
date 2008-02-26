@@ -1,0 +1,64 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vis_noninteractive", "vis_noninteractive\vis_noninteractive.vcproj", "{471B9AD7-759C-4BBE-8F3E-4A8182B05938}"
+	ProjectSection(ProjectDependencies) = postProject
+		{60E01FA6-36A3-4B62-B20A-BB6AED058EF4} = {60E01FA6-36A3-4B62-B20A-BB6AED058EF4}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "meshless_vis", "meshless_vis\vis.vcproj", "{60E01FA6-36A3-4B62-B20A-BB6AED058EF4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vis_wx", "vis_wx\vis_wx.vcproj", "{B598B447-AED6-4B2E-90C7-72CFDF384642}"
+	ProjectSection(ProjectDependencies) = postProject
+		{60E01FA6-36A3-4B62-B20A-BB6AED058EF4} = {60E01FA6-36A3-4B62-B20A-BB6AED058EF4}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vis_timing_test", "vis_timing_test\vis_timing_test.vcproj", "{54767B74-5E6E-49D2-A5DC-5FE8C5B7E928}"
+	ProjectSection(ProjectDependencies) = postProject
+		{60E01FA6-36A3-4B62-B20A-BB6AED058EF4} = {60E01FA6-36A3-4B62-B20A-BB6AED058EF4}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		EmuDebug|Win32 = EmuDebug|Win32
+		EmuRelease|Win32 = EmuRelease|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{471B9AD7-759C-4BBE-8F3E-4A8182B05938}.Debug|Win32.ActiveCfg = Debug|Win32
+		{471B9AD7-759C-4BBE-8F3E-4A8182B05938}.Debug|Win32.Build.0 = Debug|Win32
+		{471B9AD7-759C-4BBE-8F3E-4A8182B05938}.EmuDebug|Win32.ActiveCfg = EmuDebug|Win32
+		{471B9AD7-759C-4BBE-8F3E-4A8182B05938}.EmuDebug|Win32.Build.0 = EmuDebug|Win32
+		{471B9AD7-759C-4BBE-8F3E-4A8182B05938}.EmuRelease|Win32.ActiveCfg = EmuRelease|Win32
+		{471B9AD7-759C-4BBE-8F3E-4A8182B05938}.EmuRelease|Win32.Build.0 = EmuRelease|Win32
+		{471B9AD7-759C-4BBE-8F3E-4A8182B05938}.Release|Win32.ActiveCfg = Release|Win32
+		{471B9AD7-759C-4BBE-8F3E-4A8182B05938}.Release|Win32.Build.0 = Release|Win32
+		{60E01FA6-36A3-4B62-B20A-BB6AED058EF4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{60E01FA6-36A3-4B62-B20A-BB6AED058EF4}.Debug|Win32.Build.0 = Debug|Win32
+		{60E01FA6-36A3-4B62-B20A-BB6AED058EF4}.EmuDebug|Win32.ActiveCfg = EmuDebug|Win32
+		{60E01FA6-36A3-4B62-B20A-BB6AED058EF4}.EmuDebug|Win32.Build.0 = EmuDebug|Win32
+		{60E01FA6-36A3-4B62-B20A-BB6AED058EF4}.EmuRelease|Win32.ActiveCfg = EmuRelease|Win32
+		{60E01FA6-36A3-4B62-B20A-BB6AED058EF4}.EmuRelease|Win32.Build.0 = EmuRelease|Win32
+		{60E01FA6-36A3-4B62-B20A-BB6AED058EF4}.Release|Win32.ActiveCfg = Release|Win32
+		{60E01FA6-36A3-4B62-B20A-BB6AED058EF4}.Release|Win32.Build.0 = Release|Win32
+		{B598B447-AED6-4B2E-90C7-72CFDF384642}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B598B447-AED6-4B2E-90C7-72CFDF384642}.Debug|Win32.Build.0 = Debug|Win32
+		{B598B447-AED6-4B2E-90C7-72CFDF384642}.EmuDebug|Win32.ActiveCfg = EmuDebug|Win32
+		{B598B447-AED6-4B2E-90C7-72CFDF384642}.EmuDebug|Win32.Build.0 = EmuDebug|Win32
+		{B598B447-AED6-4B2E-90C7-72CFDF384642}.EmuRelease|Win32.ActiveCfg = EmuRelease|Win32
+		{B598B447-AED6-4B2E-90C7-72CFDF384642}.EmuRelease|Win32.Build.0 = EmuRelease|Win32
+		{B598B447-AED6-4B2E-90C7-72CFDF384642}.Release|Win32.ActiveCfg = Release|Win32
+		{B598B447-AED6-4B2E-90C7-72CFDF384642}.Release|Win32.Build.0 = Release|Win32
+		{54767B74-5E6E-49D2-A5DC-5FE8C5B7E928}.Debug|Win32.ActiveCfg = Debug|Win32
+		{54767B74-5E6E-49D2-A5DC-5FE8C5B7E928}.Debug|Win32.Build.0 = Debug|Win32
+		{54767B74-5E6E-49D2-A5DC-5FE8C5B7E928}.EmuDebug|Win32.ActiveCfg = EmuDebug|Win32
+		{54767B74-5E6E-49D2-A5DC-5FE8C5B7E928}.EmuDebug|Win32.Build.0 = EmuDebug|Win32
+		{54767B74-5E6E-49D2-A5DC-5FE8C5B7E928}.EmuRelease|Win32.ActiveCfg = EmuRelease|Win32
+		{54767B74-5E6E-49D2-A5DC-5FE8C5B7E928}.EmuRelease|Win32.Build.0 = EmuRelease|Win32
+		{54767B74-5E6E-49D2-A5DC-5FE8C5B7E928}.Release|Win32.ActiveCfg = Release|Win32
+		{54767B74-5E6E-49D2-A5DC-5FE8C5B7E928}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
