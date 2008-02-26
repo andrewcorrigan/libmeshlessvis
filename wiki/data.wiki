@@ -1,7 +1,9 @@
-#summary Links to meshless volume data sets
+#summary Meshless Volume Data Sets for libMeshlesVis
 
-= Introduction =
+= Data =
 
+This page links to datasets that you can visualize using libMeshlessVis.  If you use these data sets for research purposes, please note the included citation information. 
 
-
-= Details =
+  * [http://www.cos.gmu.edu/~wallin John Wallin], et al.
+    # [http://cds.gmu.edu/~acorriga/pubs/cartwheel.tar.gz SPH Collisional Ring Galaxy]
+    # [http://cds.gmu.edu/~acorriga/pubs/bar.tar.gz SPH Bar Galaxy]
