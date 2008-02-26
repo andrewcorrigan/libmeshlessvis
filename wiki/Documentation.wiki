@@ -1,2 +1,3 @@
 #labels Featured
-There hasn't been any time to write documentation yet!
+  * [WhatsNew What's New?]
+  * [Readme Readme]
