@@ -1,6 +1,0 @@
-#labels Featured
-This page links to datasets that you can visualize using libMeshlessVis.  If you use these data sets for research purposes, please note the included citation information. 
-
-  * [http://www.cos.gmu.edu/~jwallin John Wallin], et al.
-    # [http://cds.gmu.edu/~acorriga/pubs/cartwheel.tar.gz SPH Collisional Ring Galaxy] 10.6 MB
-    # [http://cds.gmu.edu/~acorriga/pubs/bar.tar.gz SPH Bar Galaxy] 33.6 MB
