@@ -79,7 +79,7 @@ __device__ float fourier_transform_sph(float r)
 __global__ void fourier_transform_sph_half_domain(int first_term, int number_of_terms, MeshlessDataset meshless_dataset, VisConfig vis_config)
 {
 	extern __shared__ float shared[];
-	int block_length = blockDim.x;
+	int block_length = fvr_config._fvr_block_length;
 	Constraint* ds_constraints = (Constraint*)shared;
 	float* ds_radii = (float*)(ds_constraints + block_length);
 
@@ -160,7 +160,7 @@ __global__ void fourier_transform_sph_half_domain(int first_term, int number_of_
 __global__ void fourier_transform_sph_half_domain_no_radii(int first_term, int number_of_terms, MeshlessDataset meshless_dataset, VisConfig vis_config)
 {
 	extern __shared__ float shared[];
-	int block_length = blockDim.x;
+	int block_length = fvr_config._fvr_block_length;
 	Constraint* ds_constraints = (Constraint*)shared;
 
 	// in order to understand how x, index_x, and index are computed we consider a concrete 1D example: Nx = 8, cutoff.x = 3
@@ -242,7 +242,7 @@ __device__ float fourier_transform_gaussian(float r)
 __global__ void fourier_transform_gaussian_half_domain(int first_term, int number_of_terms, MeshlessDataset meshless_dataset, VisConfig vis_config)
 {
 	extern __shared__ float shared[];
-	int block_length = blockDim.x;
+	int block_length = fvr_config._fvr_block_length;
 	Constraint* ds_constraints = (Constraint*)shared;
 	float* ds_radii = (float*)(ds_constraints + block_length);
 
@@ -323,7 +323,7 @@ __global__ void fourier_transform_gaussian_half_domain(int first_term, int numbe
 __global__ void fourier_transform_gaussian_half_domain_no_radii(int first_term, int number_of_terms, MeshlessDataset meshless_dataset, VisConfig vis_config)
 {
 	extern __shared__ float shared[];
-	int block_length = blockDim.x;
+	int block_length = fvr_config._fvr_block_length;
 	Constraint* ds_constraints = (Constraint*)shared;
 
 	// in order to understand how x, index_x, and index are computed we consider a concrete 1D example: Nx = 8, cutoff.x = 3
@@ -414,7 +414,7 @@ __device__ float fourier_transform_wendland_d3_c2(float r)
 __global__ void fourier_transform_wendland_d3_c2_half_domain(int first_term, int number_of_terms, MeshlessDataset meshless_dataset, VisConfig vis_config)
 {
 	extern __shared__ float shared[];
-	int block_length = blockDim.x;
+	int block_length = fvr_config._fvr_block_length;
 	Constraint* ds_constraints = (Constraint*)shared;
 	float* ds_radii = (float*)(ds_constraints + block_length);
 
@@ -495,7 +495,7 @@ __global__ void fourier_transform_wendland_d3_c2_half_domain(int first_term, int
 __global__ void fourier_transform_wendland_d3_c2_half_domain_no_radii(int first_term, int number_of_terms, MeshlessDataset meshless_dataset, VisConfig vis_config)
 {
 	extern __shared__ float shared[];
-	int block_length = blockDim.x;
+	int block_length = fvr_config._fvr_block_length;
 	Constraint* ds_constraints = (Constraint*)shared;
 
 	// in order to understand how x, index_x, and index are computed we consider a concrete 1D example: Nx = 8, cutoff.x = 3
