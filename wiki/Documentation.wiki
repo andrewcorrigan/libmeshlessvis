@@ -10,12 +10,11 @@ This library implements volume visualization of meshless data on NVIDIA graphics
 The code is licensed under the GPL.  If it would be useful to you for the code to be licensed under alternative license, please contact us.  We ask that if you use this library for research, to please cite the paper at http://cds.gmu.edu/~acorriga/pubs/meshless_fvr
 
 ===Requirements===
-  * CUDA
-  * GLEW
-  * OpenGL >=2.1 + ARB_texture_float
-  * wxWidgets 2.8
-  * boost/math/quaternion.h
-  * Magick++
+  * [http://www.nvidia.com/object/cuda_home.html CUDA]
+  * [http://glew.sourceforge.net/ GLEW] with hardware support for OpenGL >=2.1 and ARB_texture_float
+  * [http://www.wxwidgets.org/ wxWidgets 2.8]
+  * [http://www.boost.org/doc/html/boost_math/quaternions.html Boost.Math.Quaternions]
+  * [http://www.imagemagick.org/Magick++/ Magick++]
 		
 ===Known issues===
   * SEVERE: This code does not avoid the Windows/Linux/CUDA bug that if the graphics card takes too long to execute a kernel then the code/OS crashes.  This happens with libMeshlessVis if you turn the settings up too high with respect to how fast your hardware is.
