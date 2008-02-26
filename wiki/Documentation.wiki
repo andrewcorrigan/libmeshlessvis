@@ -1,1 +1,2 @@
+#labels Featured
 There hasn't been any time to write documentation yet!
