@@ -249,7 +249,10 @@ for function_name in fourier_transform.keys():
 	int thread_index = threadIdx.x;
 	for(unsigned int k = first_term; k < number_of_terms; ) 
 	{
-		// step 1: stage global memory into shared memory (this access is coalesced, and should be minimal since there is one 128-bit read and one 32-bit read
+		// step 1: stage global memory into shared memory.  this access is coalesced, and should be minimal since there is one 128-bit read""")
+		if has_radii: source_file.write(' and one 32-bit read')
+		source_file.write(\
+"""
 		if(k + thread_index < number_of_terms)
 		{
 			ds_constraints[thread_index] = meshless_dataset.d_constraints[k + thread_index];

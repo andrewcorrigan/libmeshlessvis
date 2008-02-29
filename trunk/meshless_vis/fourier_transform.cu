@@ -129,7 +129,7 @@ __global__ void fourier_transform_sph_half_domain(int first_term, int number_of_
 	int thread_index = threadIdx.x;
 	for(unsigned int k = first_term; k < number_of_terms; ) 
 	{
-		// step 1: stage global memory into shared memory (this access is coalesced, and should be minimal since there is one 128-bit read and one 32-bit read
+		// step 1: stage global memory into shared memory.  this access is coalesced, and should be minimal since there is one 128-bit read and one 32-bit read
 		if(k + thread_index < number_of_terms)
 		{
 			ds_constraints[thread_index] = meshless_dataset.d_constraints[k + thread_index];
@@ -208,7 +208,7 @@ __global__ void fourier_transform_sph_half_domain_no_radii(int first_term, int n
 	int thread_index = threadIdx.x;
 	for(unsigned int k = first_term; k < number_of_terms; ) 
 	{
-		// step 1: stage global memory into shared memory (this access is coalesced, and should be minimal since there is one 128-bit read and one 32-bit read
+		// step 1: stage global memory into shared memory.  this access is coalesced, and should be minimal since there is one 128-bit read
 		if(k + thread_index < number_of_terms)
 		{
 			ds_constraints[thread_index] = meshless_dataset.d_constraints[k + thread_index];
@@ -292,7 +292,7 @@ __global__ void fourier_transform_gaussian_half_domain(int first_term, int numbe
 	int thread_index = threadIdx.x;
 	for(unsigned int k = first_term; k < number_of_terms; ) 
 	{
-		// step 1: stage global memory into shared memory (this access is coalesced, and should be minimal since there is one 128-bit read and one 32-bit read
+		// step 1: stage global memory into shared memory.  this access is coalesced, and should be minimal since there is one 128-bit read and one 32-bit read
 		if(k + thread_index < number_of_terms)
 		{
 			ds_constraints[thread_index] = meshless_dataset.d_constraints[k + thread_index];
@@ -371,7 +371,7 @@ __global__ void fourier_transform_gaussian_half_domain_no_radii(int first_term, 
 	int thread_index = threadIdx.x;
 	for(unsigned int k = first_term; k < number_of_terms; ) 
 	{
-		// step 1: stage global memory into shared memory (this access is coalesced, and should be minimal since there is one 128-bit read and one 32-bit read
+		// step 1: stage global memory into shared memory.  this access is coalesced, and should be minimal since there is one 128-bit read
 		if(k + thread_index < number_of_terms)
 		{
 			ds_constraints[thread_index] = meshless_dataset.d_constraints[k + thread_index];
@@ -464,7 +464,7 @@ __global__ void fourier_transform_wendland_d3_c2_half_domain(int first_term, int
 	int thread_index = threadIdx.x;
 	for(unsigned int k = first_term; k < number_of_terms; ) 
 	{
-		// step 1: stage global memory into shared memory (this access is coalesced, and should be minimal since there is one 128-bit read and one 32-bit read
+		// step 1: stage global memory into shared memory.  this access is coalesced, and should be minimal since there is one 128-bit read and one 32-bit read
 		if(k + thread_index < number_of_terms)
 		{
 			ds_constraints[thread_index] = meshless_dataset.d_constraints[k + thread_index];
@@ -543,7 +543,7 @@ __global__ void fourier_transform_wendland_d3_c2_half_domain_no_radii(int first_
 	int thread_index = threadIdx.x;
 	for(unsigned int k = first_term; k < number_of_terms; ) 
 	{
-		// step 1: stage global memory into shared memory (this access is coalesced, and should be minimal since there is one 128-bit read and one 32-bit read
+		// step 1: stage global memory into shared memory.  this access is coalesced, and should be minimal since there is one 128-bit read
 		if(k + thread_index < number_of_terms)
 		{
 			ds_constraints[thread_index] = meshless_dataset.d_constraints[k + thread_index];
