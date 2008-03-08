@@ -7,7 +7,7 @@ This library implements volume visualization of meshless data on NVIDIA graphics
   * John Wallin, jwallin@gmu.edu
 
 ===License===
-The code is licensed under the GPL.  If it would be useful to you for the code to be licensed under an alternative license, please contact us.  We ask that if you use this library for research, to please cite the paper at http://cds.gmu.edu/~acorriga/pubs/meshless_fvr
+The code is licensed under the GPL.  If it would be useful to you for the code to be licensed under an alternative license, please contact us.  We ask that if you use this library for research, to please consider citing the paper: [http://cds.gmu.edu/~acorriga/pubs/meshless_fvr Visualization of Meshless Simulations Using Fourier Volume Rendering]
 
 ===Requirements===
   * [http://www.nvidia.com/object/cuda_home.html CUDA]
