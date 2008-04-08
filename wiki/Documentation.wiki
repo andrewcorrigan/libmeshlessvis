@@ -11,40 +11,52 @@ The code is licensed under the GPL.  If it would be useful to you for the code t
 
 ===Requirements===
   * [http://www.nvidia.com/object/cuda_home.html CUDA]
-  * [http://glew.sourceforge.net/ GLEW] with hardware support for OpenGL >=2.1 and ARB_texture_float
-  * [http://www.wxwidgets.org/ wxWidgets 2.8]
   * [http://www.boost.org/doc/html/boost_math/quaternions.html Boost.Math.Quaternions]
-  * [http://www.imagemagick.org/Magick++/ Magick++]
-		
+  * [http://glew.sourceforge.net/ GLEW]
+  * vis_wx: Hardware OpenGL support for OpenGL >=2.1 and the ARB_texture_float extension
+  * vis_wx: [http://www.wxwidgets.org/ wxWidgets 2.8]
+  * vis_wx, vis_noninteractive: [http://www.imagemagick.org/Magick++/ Magick++] for vis_wx and vis_noninteractive
+  * CPU: [http://gcc.gnu.org/gcc-4.2/ GCC with OpenMP support] for the CPU library
+  * CPU: [http://www.fftw.org/ Single-precision, multi-threaded, FFTW 3.1.2] for the CPU library
+
 ===Known issues===
-  * SEVERE: This code does not avoid the Windows/Linux/CUDA bug that if the graphics card takes too long to execute a kernel then the code/OS crashes.  This happens with libMeshlessVis if you turn the settings up too high with respect to how fast your hardware is.
+  * SEVERE: This code does not avoid the Windows/Linux/CUDA bug that if the graphics card takes too long to execute a kernel then the code/OS crashes, if the graphics card is being used for a display.  This happens with libMeshlessVis if you turn the settings up too high with respect to how fast your hardware is.
 
 ===Building===
-  * We recommend using our 32-bit Windows XP binaries or our 32/64-bit Ubuntu 7.10 binaries.
+  * We recommend using our 32-bit Windows XP binaries or our 64-bit Ubuntu 7.10 binaries.
   * There are makefiles for Linux and Visual Studio solutions and projects included for Windows 
 
-===Using the library in your code===
+===Using the CUDA library in your code===
   # Include meshless_vis.h
   # Link with the static library,
-    * Windows: meshless_vis.lib or meshless_vis_emu.lib
-    * Linux: libmeshless_vis.a or libmeshless_vis_emu.a
+    * Windows: meshless_vis.lib
+    * Linux: libmeshless_vis64.a
   # Link with the CUDA libraries:
     * Windows:
       * cuda.lib
       * cudart.lib
-      * cufft.lib (or cufftemu.lib if built with emulation enabled)
+      * cufft.lib
       * cutil.lib (from the CUDA sdk)
    * Linux:
       * libcuda.a
       * libcudart.a
-      * libcufft.a (or libcufftemu.a if built with emulation enabled)
+      * libcufft.a
       * libcutil.a (from the CUDA sdk)
   # Link with GLEW and OpenGL
 
+===Using the CPU library in your code===
+  # define {{{_LIBMESHLESSVIS_USE_CPU}}} and then include meshless_vis.h
+  # Link with the static library,
+    * Windows: meshless_vis_cpu.lib
+    * Linux: libmeshless_vis64_cpu.a
+  # Link with FFTW (the single-precision, multi-threaded version)
+  # Link with GLEW and OpenGL
+
 ===What's New?===
-  * Version 0.4 - Coming Soon
-    * Better parallelization for small cutoff frequencies
-    * Asynchronous host memory access
+  * Version 0.4
+    * Parallelization of the summation using partial sums
+    * An alternative back end using C++, OpenMP, and multi-threaded FFTW 3.
+    * Removed the Python code generation in favor of using C++-style templates
   * Version 0.3.5 - February 25, 2008 -  Performance Improvements, Renaming
     * More efficient memory access (better coalescing, better shared memory usage)
     * More optimal thread block sizes
