@@ -2,7 +2,7 @@
 #dbg := 1
 #cpu := 1
 
-MESHLESS_VIS_PATH := $(HOME)/workspace/meshless_fvr
+MESHLESS_VIS_PATH := ..
 CUDA_INSTALL_PATH := /usr/local/cuda
 GLEW_PATH := /usr
 MAGICK_PATH := /usr
