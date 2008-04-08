@@ -19,25 +19,25 @@
 
 include ../settings.mk
 
-ifeq ($(emu), 1)
-	ifeq ($(dbg),1)
-		SUFFIX := _emuD
-	else
-		SUFFIX := _emu
-	endif
-else
-	ifeq ($(dbg),1)
-		SUFFIX := _D
-	else
-		SUFFIX := 
-	endif
+ifneq "$(strip $(shell uname -m | grep 64))" ""
+	SUFFIX := $(SUFFIX)64
 endif
 
 ifeq ($(dbg),1)
 	OPTIONS := -g
+	SUFFIX := $(SUFFIX)D
 else
 	OPTIONS := -O3
 endif
+
+ifeq ($(cpu), 1)
+	SUFFIX := $(SUFFIX)_cpu
+else
+	ifeq ($(emu), 1)
+		SUFFIX := $(SUFFIX)_emu
+	endif
+endif
+
 
 MESHLESS_VIS_INCLUDE_PATH := -I$(MESHLESS_VIS_PATH)/include
 MESHLESS_VIS_LIB_PATH := -L$(MESHLESS_VIS_PATH)/lib
@@ -48,13 +48,27 @@ MAGICK_LIB_PATH := -L$(MAGICK_PATH)/lib
 GLEW_INCLUDE_PATH := -I$(GLEW_PATH)/include
 GLEW_LIB_PATH := -L$(GLEW_PATH)/lib
 
-CUDA_INCLUDE_PATHS := -I$(CUDA_INSTALL_PATH)/include -I$(CUDA_SDK_INSTALL_PATH)/common/inc
-CUDA_LIB_PATHS := -L$(CUDA_INSTALL_PATH)/lib -L$(CUDA_SDK_INSTALL_PATH)/lib
+FFTW_INCLUDE_PATH := -I$(FFTW_PATH)/include
+FFTW_LIB_PATH := -L$(FFTW_PATH)/lib
 
-MESHLESS_VIS := $(MESHLESS_VIS_INCLUDE_PATH) $(MESHLESS_VIS_LIB_PATH) -lmeshless_vis$(SUFFIX)
+CUDA_INCLUDE_PATHS := -I$(CUDA_INSTALL_PATH)/include -I$(CUDA_SDK_INSTALL_PATH)/common/inc
+CUDA_LIB_PATHS := -L$(CUDA_INSTALL_PATH)/lib -L$(CUDA_SDK_INSTALL_PATH)/lib -L$(CUDA_SDK_INSTALL_PATH)/common/lib
+
+MESHLESS_VIS := $(MESHLESS_VIS_INCLUDE_PATH) $(MESHLESS_VIS_LIB_PATH) -lmeshless_vis$(SUFFIX) $(CUDA_LIB_PATHS)
+ifneq ($(cpu), 1)
+	MESHLESS_VIS := $(MESHLESS_VIS) -lcudpp$(SUFFIX)
+endif
+
 MAGICK := $(MAGICK_INCLUDE_PATH) $(MAGICK_LIB_PATH) -lMagick++
-CUDA := $(CUDA_INCLUDE_PATHS) $(CUDA_LIB_PATHS)  -lcuda -lcudart -lcutil
-GLEW := $(GLEW_INCLUDE_PATH) $(GLEW_LIB_PATH) -lGLEW
+
+FFTW := $(FFTW_INCLUDE_PATH) $(FFTW_LIB_PATH) -lfftw3f -lfftw3f_threads
+
+CUDA := $(CUDA_INCLUDE_PATHS) $(CUDA_LIB_PATHS)
+ifneq ($(cpu), 1)
+	CUDA := $(CUDA) -lcuda -lcudart -lcutil
+endif
+
+GLEW := $(GLEW_INCLUDE_PATH) $(GLEW_LIB_PATH) -lGLEW -lGL
 ifeq ($(needwx), 1)
 	WX := $(shell wx-config --libs std,gl --cppflags)
 endif
@@ -66,3 +80,6 @@ endif
 
 
 BINDIR := ../bin
+
+
+

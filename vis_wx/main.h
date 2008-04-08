@@ -98,6 +98,7 @@ public:
 
 	int GetCutoffU();
 	int GetCutoffV();
+    int2 GetCutoff();
 
 	int GetNumberOfSamplesU();
 	int GetNumberOfSamplesV();
@@ -114,7 +115,7 @@ public:
 	float GetXRotation();
 	float GetYRotation();
 	
-	int GetMinimumNumberOfBlocks();
+	int GetNumberOfPartialSums();
 
 	int GetBlockLength();
 	
@@ -142,7 +143,7 @@ protected:
 	void OnMinimumIntensitySlider(wxCommandEvent& event);
 	void OnXRotationSlider(wxCommandEvent& event);
 	void OnYRotationSlider(wxCommandEvent& event);
-	void OnMinimumNumberOfBlocksSlider(wxCommandEvent& event);
+	void OnNumberOfPartialSumsSlider(wxCommandEvent& event);
 	void OnBlockLengthSlider(wxCommandEvent& event);
 	
 	void OnAnimationToggleButton(wxCommandEvent& event);
@@ -216,9 +217,9 @@ protected:
 	wxSlider* block_length_slider;
 	static const wxWindowID block_length_ID = 16;
 
-	wxStaticText* minimum_number_of_blocks_label;
-	wxSlider* minimum_number_of_blocks_slider;
-	static const wxWindowID minimum_number_of_blocks_ID = 17;
+	wxStaticText* number_of_partial_sums_label;
+	wxSlider* number_of_partial_sums_slider;
+	static const wxWindowID number_of_partial_sums_ID = 17;
 
 	wxStaticText* bounding_box_label;
 	wxCheckBox* bounding_box_check_box;

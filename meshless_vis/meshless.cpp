@@ -24,35 +24,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <iostream>
 #include <fstream>
 
-MeshlessDataset get_simple_meshless_dataset(int number_of_terms, Constraint* h_constraints, float* h_radii, const char* name)
+MeshlessDataset get_simple_meshless_dataset(int number_of_terms, Constraint* h_constraints, float* h_radii, BasisFunctionId basis_function_id)
 {
 	MeshlessDataset meshless_dataset;
-	meshless_dataset.h_constraints = h_constraints;
-	meshless_dataset.h_radii = h_radii;
 	meshless_dataset.number_of_groups = 1;
 	meshless_dataset.groups = new Group[1];
-	meshless_dataset.groups[0].name = new char[strlen(name) + 1];
-	strcpy(meshless_dataset.groups[0].name, name);
+	meshless_dataset.groups[0].basis_function_id = basis_function_id;
 	meshless_dataset.groups[0].number_of_terms = number_of_terms;
+	meshless_dataset.groups[0].h_constraints = h_constraints;
+	meshless_dataset.groups[0].h_radii = h_radii;
 	return meshless_dataset;
-}
-
-void delete_meshless_dataset_groups(MeshlessDataset meshless_dataset)
-{
-	for(int i = 0; i != meshless_dataset.number_of_groups; i++)
-	{
-		delete[] meshless_dataset.groups[i].name;
-	}
-	delete[] meshless_dataset.groups;
 }
 
 void delete_meshless_dataset(MeshlessDataset meshless_dataset)
 {
-	delete[] meshless_dataset.h_constraints;
-	if(meshless_dataset.h_radii != 0) delete[] meshless_dataset.h_radii;
-
-	delete_meshless_dataset_groups(meshless_dataset);
+	for(int i = 0; i != meshless_dataset.number_of_groups; i++)
+	{
+		delete[] meshless_dataset.groups[i].h_constraints;
+		if(meshless_dataset.groups[i].h_radii != 0) delete[] meshless_dataset.groups[i].h_radii;
+	}
+	delete[] meshless_dataset.groups;
 }
+
 void delete_meshless_datasets(MeshlessDataset* meshless_datasets, int number_of_datasets)
 {
 	for(int i = 0; i != number_of_datasets; i++)
@@ -74,12 +67,14 @@ int get_number_of_terms(MeshlessDataset* meshless_dataset)
 
 void shift_meshless_dataset(MeshlessDataset* meshless_dataset, float x, float y, float z)
 {
-	int N = get_number_of_terms(meshless_dataset);
-	for(int i = 0; i != N; i++)
+	for(int j = 0; j != meshless_dataset->number_of_groups; j++)
 	{
-		meshless_dataset->h_constraints[i].position.x += x;
-		meshless_dataset->h_constraints[i].position.y += y;
-		meshless_dataset->h_constraints[i].position.z += z;
+		for(int k = 0; k != meshless_dataset->groups[j].number_of_terms; k++)
+		{
+			meshless_dataset->groups[j].h_constraints[k].position.x += x;
+			meshless_dataset->groups[j].h_constraints[k].position.y += y;
+			meshless_dataset->groups[j].h_constraints[k].position.z += z;
+		}
 	}
 }
 
@@ -102,18 +97,17 @@ void load_meshless_datasets_from_file(const char* filename, MeshlessDataset** me
 	(*meshless_datasets) = new MeshlessDataset[*number_of_datasets];
 
 	for(int i = 0; i != *number_of_datasets; i++) {
-		int number_of_terms = 0;
-
+		
 		file >> (*meshless_datasets)[i].number_of_groups;
 		(*meshless_datasets)[i].groups = new Group[(*meshless_datasets)[i].number_of_groups];
 		for(int j = 0; j != (*meshless_datasets)[i].number_of_groups; j++) {
-			std::string name, ignore_operator;
+			std::string basis_function_name, ignore_operator;
 			file >> (*meshless_datasets)[i].groups[j].number_of_terms;
-			number_of_terms += (*meshless_datasets)[i].groups[j].number_of_terms;
 
-			file >> name;
-			(*meshless_datasets)[i].groups[j].name = new char[name.length() + 1];
-			strcpy((*meshless_datasets)[i].groups[j].name, name.c_str());
+			file >> basis_function_name;
+			if(basis_function_name == "sph")                 (*meshless_datasets)[i].groups[j].basis_function_id = SPH;
+			else if(basis_function_name == "gaussian")       (*meshless_datasets)[i].groups[j].basis_function_id = GAUSSIAN;
+			else if(basis_function_name == "wendland_d3_c2") (*meshless_datasets)[i].groups[j].basis_function_id = WENDLAND_D3_C2;
 
 			file >>  ignore_operator;
 	
@@ -121,21 +115,31 @@ void load_meshless_datasets_from_file(const char* filename, MeshlessDataset** me
 			int parameters;
 			file >> parameters;		//0 if none, 1 if each bf has a parameter, 2 if all are the same
 		}
-		(*meshless_datasets)[i].h_constraints = new Constraint[number_of_terms];
-		for(int j = 0; j != number_of_terms; j++) 
-			file >> (*meshless_datasets)[i].h_constraints[j].position.x >> (*meshless_datasets)[i].h_constraints[j].position.y >> (*meshless_datasets)[i].h_constraints[j].position.z;
+		for(int j = 0; j != (*meshless_datasets)[i].number_of_groups; j++)
+		{
+			(*meshless_datasets)[i].groups[j].h_constraints = new Constraint[(*meshless_datasets)[i].groups[j].number_of_terms];
 
-		for(int j = 0; j != number_of_terms; j++) file >> (*meshless_datasets)[i].h_constraints[j].weight;
+			for(int k = 0; k != (*meshless_datasets)[i].groups[j].number_of_terms; k++) 
+				file >> (*meshless_datasets)[i].groups[j].h_constraints[k].position.x >> (*meshless_datasets)[i].groups[j].h_constraints[k].position.y >> (*meshless_datasets)[i].groups[j].h_constraints[k].position.z;
+		}
+
+		for(int j = 0; j != (*meshless_datasets)[i].number_of_groups; j++)
+			for(int k = 0; k != (*meshless_datasets)[i].groups[j].number_of_terms; k++)
+				file >> (*meshless_datasets)[i].groups[j].h_constraints[k].weight;
 
 		int has_radii;
 		file >> has_radii;
-		if(has_radii)
+		for(int j = 0; j != (*meshless_datasets)[i].number_of_groups; j++)
 		{
-			(*meshless_datasets)[i].h_radii = new float[number_of_terms];
-			for(int j = 0; j != number_of_terms; j++) file >> (*meshless_datasets)[i].h_radii[j];
-		}
-		else {
-			(*meshless_datasets)[i].h_radii = 0;	
+			if(has_radii)
+			{
+				(*meshless_datasets)[i].groups[j].h_radii = new float[(*meshless_datasets)[i].groups[j].number_of_terms];
+				for(int k = 0; k != (*meshless_datasets)[i].groups[j].number_of_terms; k++) file >> (*meshless_datasets)[i].groups[j].h_radii[k];
+			}
+			else
+			{
+				(*meshless_datasets)[i].groups[j].h_radii = 0;
+			}
 		}
 	}
 }
@@ -145,36 +149,38 @@ void save_meshless_datasets_to_file(const char* filename, MeshlessDataset* meshl
 	std::ofstream file(filename);
 
 	file << number_of_datasets << std::endl;
-	if(number_of_datasets == 0)
-	{
-		return;	
-	}
-
+	if(number_of_datasets == 0)	return;	
 
 	for(int i = 0; i != number_of_datasets; i++) {
-		int number_of_terms = 0;
 
 		file << meshless_datasets[i].number_of_groups << std::endl;
 
 		for(int j = 0; j != meshless_datasets[i].number_of_groups; j++) {
 			file << meshless_datasets[i].groups[j].number_of_terms << " ";
-			number_of_terms += meshless_datasets[i].groups[j].number_of_terms;
 
 			//todo: handle parameters
 			int parameters = 0;	//0 if none, 1 if each bf has a parameter, 2 if all are the same
+			if(meshless_datasets[i].groups[j].basis_function_id == SPH)                 file << "sph";
+			else if(meshless_datasets[i].groups[j].basis_function_id == GAUSSIAN)       file << "gaussian";
+			else if(meshless_datasets[i].groups[j].basis_function_id == WENDLAND_D3_C2) file << "wendland_d3_c2";
 
-			file << meshless_datasets[i].groups[j].name << " operatornotusedanymore " << parameters << std::endl;
-
+			file << " unused " << parameters << std::endl;
 		}
-			
-		for(int j = 0; j != number_of_terms; j++) 
-			file << meshless_datasets[i].h_constraints[j].position.x << " " << meshless_datasets[i].h_constraints[j].position.y << " "  << meshless_datasets[i].h_constraints[j].position.z << std::endl;
 		
-		for(int j = 0; j != number_of_terms; j++) file << meshless_datasets[i].h_constraints[j].weight << std::endl;
+		for(int j = 0; j != meshless_datasets[i].number_of_groups; j++)
+			for(int k = 0; k != meshless_datasets[i].groups[j].number_of_terms; k++) 
+				file << meshless_datasets[i].groups[j].h_constraints[k].position.x << " " << meshless_datasets[i].groups[j].h_constraints[k].position.y << " "  << meshless_datasets[i].groups[j].h_constraints[k].position.z << std::endl;
+	
+		for(int j = 0; j != meshless_datasets[i].number_of_groups; j++)
+			for(int k = 0; k != meshless_datasets[i].groups[j].number_of_terms; k++) 
+				file << meshless_datasets[i].groups[j].h_constraints[k].weight << std::endl;
 
-		if(meshless_datasets[i].h_radii != 0) {
+		if(meshless_datasets[0].number_of_groups > 0 && meshless_datasets[0].groups[0].h_radii != 0)
+		{
 			file << 1 << std::endl;
-			for(int j = 0; j != number_of_terms; j++) file << meshless_datasets[i].h_radii[j] << std::endl;
+			for(int j = 0; j != meshless_datasets[i].number_of_groups; j++)
+				for(int k = 0; k != meshless_datasets[i].groups[j].number_of_terms; k++)
+					file << meshless_datasets[i].groups[j].h_radii[k] << std::endl;
 		}
 		else file << 0 << std::endl;
 	}

@@ -61,9 +61,9 @@ int main(int argc, char** argv)
 		std::cout << name << std::endl;
 
 		MeshlessDataset meshless_dataset = meshless_datasets[k];
-		vis_register_meshless_dataset(&meshless_dataset);
-		vis_fourier_volume_rendering(meshless_dataset, vis_config);
-		vis_unregister_meshless_dataset(&meshless_dataset);
+		vis_register_meshless_dataset(vis_config, &meshless_dataset);
+		vis_fourier_volume_rendering(&meshless_dataset, vis_config);
+		vis_unregister_meshless_dataset(vis_config, &meshless_dataset);
 		vis_copy_to_host(vis_config, h_image);
 
 		
