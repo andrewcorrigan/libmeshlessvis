@@ -1,0 +1,46 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "meshless_vis_cpu", "meshless_vis\vis_cpu.vcproj", "{A4B16388-AAC1-412D-B2AF-D1AE616CD156}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vis_noninteractive_cpu", "vis_noninteractive\vis_noninteractive_cpu.vcproj", "{471B9AD7-759C-4BBE-8F3E-4A8182B05938}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A4B16388-AAC1-412D-B2AF-D1AE616CD156} = {A4B16388-AAC1-412D-B2AF-D1AE616CD156}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vis_timing_test_cpu", "vis_timing_test\vis_timing_test_cpu.vcproj", "{54767B74-5E6E-49D2-A5DC-5FE8C5B7E928}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A4B16388-AAC1-412D-B2AF-D1AE616CD156} = {A4B16388-AAC1-412D-B2AF-D1AE616CD156}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vis_wx_cpu", "vis_wx\vis_wx_cpu.vcproj", "{B598B447-AED6-4B2E-90C7-72CFDF384642}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A4B16388-AAC1-412D-B2AF-D1AE616CD156} = {A4B16388-AAC1-412D-B2AF-D1AE616CD156}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A4B16388-AAC1-412D-B2AF-D1AE616CD156}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A4B16388-AAC1-412D-B2AF-D1AE616CD156}.Debug|Win32.Build.0 = Debug|Win32
+		{A4B16388-AAC1-412D-B2AF-D1AE616CD156}.Release|Win32.ActiveCfg = Release|Win32
+		{A4B16388-AAC1-412D-B2AF-D1AE616CD156}.Release|Win32.Build.0 = Release|Win32
+		{471B9AD7-759C-4BBE-8F3E-4A8182B05938}.Debug|Win32.ActiveCfg = Debug|Win32
+		{471B9AD7-759C-4BBE-8F3E-4A8182B05938}.Debug|Win32.Build.0 = Debug|Win32
+		{471B9AD7-759C-4BBE-8F3E-4A8182B05938}.Release|Win32.ActiveCfg = Release|Win32
+		{471B9AD7-759C-4BBE-8F3E-4A8182B05938}.Release|Win32.Build.0 = Release|Win32
+		{54767B74-5E6E-49D2-A5DC-5FE8C5B7E928}.Debug|Win32.ActiveCfg = Debug|Win32
+		{54767B74-5E6E-49D2-A5DC-5FE8C5B7E928}.Debug|Win32.Build.0 = Debug|Win32
+		{54767B74-5E6E-49D2-A5DC-5FE8C5B7E928}.Release|Win32.ActiveCfg = Release|Win32
+		{54767B74-5E6E-49D2-A5DC-5FE8C5B7E928}.Release|Win32.Build.0 = Release|Win32
+		{B598B447-AED6-4B2E-90C7-72CFDF384642}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B598B447-AED6-4B2E-90C7-72CFDF384642}.Debug|Win32.Build.0 = Debug|Win32
+		{B598B447-AED6-4B2E-90C7-72CFDF384642}.Release|Win32.ActiveCfg = Release|Win32
+		{B598B447-AED6-4B2E-90C7-72CFDF384642}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

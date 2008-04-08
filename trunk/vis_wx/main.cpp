@@ -23,8 +23,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <boost/math/quaternion.hpp>
 
 #include <Magick++.h> 
+#include <iostream>
 
-const int CUTOFF_STEPS_INCREMENT = 32;
+const int CUTOFF_STEPS_INCREMENT = 16;
 
 OptionsFrame* global_options_frame = 0;
 MeshlessVisFrame* global_meshless_vis_frame = 0;
@@ -262,7 +263,6 @@ void MeshlessVisCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 	
 	if(global_options_frame != 0 && global_options_frame->IsRecording())
 	{
-
 		SaveImageToFile(global_options_frame->GetFilename());
 	}
 	
@@ -272,28 +272,34 @@ void MeshlessVisCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event)) {}
 
 void compute_bounding_box()
 {
-	bounding_box.max_x = bounding_box.min_x = meshless_datasets[0].h_constraints[0].position.x;
-	bounding_box.max_y = bounding_box.min_y = meshless_datasets[0].h_constraints[0].position.y;
-	bounding_box.max_z = bounding_box.min_z = meshless_datasets[0].h_constraints[0].position.z;
+	bounding_box.max_x = bounding_box.min_x = meshless_datasets[0].groups[0].h_constraints[0].position.x;
+	bounding_box.max_y = bounding_box.min_y = meshless_datasets[0].groups[0].h_constraints[0].position.y;
+	bounding_box.max_z = bounding_box.min_z = meshless_datasets[0].groups[0].h_constraints[0].position.z;
+	
+	std::cout << bounding_box.min_x*basis.w_u.x + bounding_box.min_y*basis.w_u.y + bounding_box.min_y*basis.w_u.z <<  ", " << bounding_box.min_x*basis.w_v.x + bounding_box.min_y*basis.w_v.y + bounding_box.min_y*basis.w_v.z << std::endl;
+	std::cout << bounding_box.max_x*basis.w_u.x + bounding_box.max_y*basis.w_u.y + bounding_box.max_y*basis.w_u.z <<  ", " << bounding_box.max_x*basis.w_v.x + bounding_box.max_y*basis.w_v.y + bounding_box.max_y*basis.w_v.z << std::endl;
+
 	
 	for(int i = 0; i != number_of_meshless_datasets; i++) {
 
 		int number_of_terms = 0;
-		for(int j = 0; j != meshless_datasets[i].number_of_groups; j++) number_of_terms += meshless_datasets[i].groups[j].number_of_terms;
-		for(int j = 0; j != number_of_terms; j++) 
+		for(int j = 0; j != meshless_datasets[i].number_of_groups; j++)
 		{
-			float x = meshless_datasets[i].h_constraints[j].position.x;
-			float y = meshless_datasets[i].h_constraints[j].position.y;
-			float z = meshless_datasets[i].h_constraints[j].position.z;
+			for(int k = 0; k != meshless_datasets[i].groups[j].number_of_terms; k++)
+			{
+				float x = meshless_datasets[i].groups[j].h_constraints[k].position.x;
+				float y = meshless_datasets[i].groups[j].h_constraints[k].position.y;
+				float z = meshless_datasets[i].groups[j].h_constraints[k].position.z;
 
-			if(bounding_box.max_x < x) bounding_box.max_x = x;
-			else if (bounding_box.min_x > x) bounding_box.min_x = x;
+				if(bounding_box.max_x < x) bounding_box.max_x = x;
+				else if (bounding_box.min_x > x) bounding_box.min_x = x;
 
-			if(bounding_box.max_y < y) bounding_box.max_y = y;
-			else if (bounding_box.min_y > y) bounding_box.min_y = y;
-			
-			if(bounding_box.max_z < z) bounding_box.max_z = z;
-			else if (bounding_box.min_z > z) bounding_box.min_z = z;
+				if(bounding_box.max_y < y) bounding_box.max_y = y;
+				else if (bounding_box.min_y > y) bounding_box.min_y = y;
+				
+				if(bounding_box.max_z < z) bounding_box.max_z = z;
+				else if (bounding_box.min_z > z) bounding_box.min_z = z;
+			}
 		}
 	}
 }
@@ -399,11 +405,11 @@ void MeshlessVisCanvas::create_image(int Nx, int Ny)
 		fbo_projection = new FBO_Projection(Nx, Ny);
 	}
 	catch(wxString str) {
-		wxMessageBox(str, wxT("Error"));
+		wxMessageBox(str, wxT("OpenGL Texture/PBO/FBO Error"));
 	}
 	catch(...)
 	{
-		wxMessageBox(wxT("Unknown exception"), wxT("Error"));
+		wxMessageBox(wxT("Unknown exception"), wxT("OpenGL Texture/PBO/FBO Error"));
 	}
 }
 
@@ -412,12 +418,10 @@ void MeshlessVisCanvas::project_data_to_image()
 	if(global_options_frame == 0 || number_of_meshless_datasets <= 0 || meshless_datasets == 0) return;
 
 	//compute FVR, storing the result in a pixel buffer
-	vis_register_buffer_object(pbo_image);
 	MeshlessDataset* meshless_dataset = &meshless_datasets[global_options_frame->GetCurrentDatasetIndex()];
-	vis_register_meshless_dataset(meshless_dataset);
-	vis_opengl_fourier_volume_rendering(*meshless_dataset, global_options_frame->vis_config, pbo_image);
-	vis_unregister_meshless_dataset(meshless_dataset);
-	vis_unregister_buffer_object(pbo_image);
+	vis_register_meshless_dataset(global_options_frame->vis_config, meshless_dataset);
+	vis_opengl_fourier_volume_rendering(meshless_dataset, global_options_frame->vis_config, pbo_image);
+	vis_unregister_meshless_dataset(global_options_frame->vis_config, meshless_dataset);
 
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo_image);
 	glBindTexture(GL_TEXTURE_2D, tex_image);
@@ -469,22 +473,22 @@ OptionsFrame::OptionsFrame(int number_of_meshless_datasets, wxWindow* parent, co
 	y_rotation_slider = new wxSlider(this, y_rotation_ID, 0, 0, 100, wxDefaultPosition, wxSize(200,30));
 
 	block_length_label = new wxStaticText(this, wxID_ANY, wxT(""));
-	block_length_slider = new wxSlider(this, block_length_ID, 0, 0, 3, wxDefaultPosition, wxSize(200,30));
+	block_length_slider = new wxSlider(this, block_length_ID, 2, 0, 2, wxDefaultPosition, wxSize(200,30));
 
-	minimum_number_of_blocks_label = new wxStaticText(this, wxID_ANY, wxT(""));
-	minimum_number_of_blocks_slider = new wxSlider(this, minimum_number_of_blocks_ID, 0, 0, 64, wxDefaultPosition, wxSize(200,30));
-		
+	number_of_partial_sums_label = new wxStaticText(this, wxID_ANY, wxT(""));
+	number_of_partial_sums_slider = new wxSlider(this, number_of_partial_sums_ID, 1, 1, 32, wxDefaultPosition, wxSize(200,30));
+
 	animation_button = new wxToggleButton(this, animation_button_ID, wxT(""));
 	animation_slider = new wxSlider(this, animation_ID, 0, 0, number_of_meshless_datasets-1, wxDefaultPosition, wxSize(200,30));
 
 	vis_config = 
 		vis_config_create(false,	// we're going to map an opengl texture into _d_image, so we don't let the config automatically allocate memory there
 		make_float2(GetStepSizeU(), GetStepSizeV()),
-		make_int2(GetCutoffU(), GetCutoffV()),
+		GetCutoff(),
 		basis.w_u, basis.w_v,
 		make_int2(GetNumberOfSamplesU(), GetNumberOfSamplesV()),
 		GetBlockLength(),
-		GetMinimumNumberOfBlocks());
+		GetNumberOfPartialSums());
 	
 	CheckConfig();
 
@@ -521,7 +525,7 @@ OptionsFrame::OptionsFrame(int number_of_meshless_datasets, wxWindow* parent, co
 	OnXRotationSlider(wx_command_event);
 	OnYRotationSlider(wx_command_event);
 	OnBlockLengthSlider(wx_command_event);
-	OnMinimumNumberOfBlocksSlider(wx_command_event);
+	OnNumberOfPartialSumsSlider(wx_command_event);
 		
 	// create the grid sizer and add widgets to it
 	grid_sizer->Add(cutoff_label);
@@ -552,8 +556,8 @@ OptionsFrame::OptionsFrame(int number_of_meshless_datasets, wxWindow* parent, co
 	grid_sizer->Add(record_text);
 	grid_sizer->Add(block_length_label);
 	grid_sizer->Add(block_length_slider);
-	grid_sizer->Add(minimum_number_of_blocks_label);
-	grid_sizer->Add(minimum_number_of_blocks_slider);
+	grid_sizer->Add(number_of_partial_sums_label);
+	grid_sizer->Add(number_of_partial_sums_slider);
 	grid_sizer->Add(bounding_box_label);
 	grid_sizer->Add(bounding_box_check_box);
 
@@ -602,10 +606,18 @@ void OptionsFrame::CheckConfig()
 
 int OptionsFrame::GetCutoffU()
 {
-	return std::max(1,cutoff_slider->GetValue()) * CUTOFF_STEPS_INCREMENT;
+	return std::min(GetNumberOfSamplesU()/2, std::max(1,cutoff_slider->GetValue()) * CUTOFF_STEPS_INCREMENT);
 }
-int OptionsFrame::GetCutoffV() { return GetCutoffU(); }
 
+int OptionsFrame::GetCutoffV()
+{
+	return std::min(GetNumberOfSamplesV()/2, std::max(1,cutoff_slider->GetValue()) * CUTOFF_STEPS_INCREMENT);
+}
+
+int2 OptionsFrame::GetCutoff()
+{
+	return make_int2(GetCutoffU(), GetCutoffV());
+}
 
 bool OptionsFrame::ShowBoundingBox()
 {
@@ -640,19 +652,19 @@ float OptionsFrame::GetYRotation()
 	return  2*PI*y_rotation_slider->GetValue() / (y_rotation_slider->GetMax() - y_rotation_slider->GetMin());	
 }
 
-int OptionsFrame::GetMinimumNumberOfBlocks() { return minimum_number_of_blocks_slider->GetValue(); }
+int OptionsFrame::GetNumberOfPartialSums() { return number_of_partial_sums_slider->GetValue(); }
 
 int OptionsFrame::GetBlockLength()
 {
 	switch(block_length_slider->GetValue())
 	{
-		case 1: return 128;
-		case 2: return 256;
-		case 3: return 512;
+	case 0: return 64;
+	case 1: return 128;
+	case 2: return 256;
 
-		// if you want to add larger block lengths, you need to increase the increment from 16 to 32
+		// if you want to add larger block lengths, you need to increase the increment from 16 to 32 (which don't work anyway)
 		
-		default: return 64;
+	default: return 64;
 	}
 }
 
@@ -683,11 +695,11 @@ void OptionsFrame::OnRecordButton(wxCommandEvent& WXUNUSED(event))
 
 void OptionsFrame::OnCutoffSlider( wxCommandEvent& WXUNUSED(event) )
 {
-	int2 cutoff_frequency = make_int2(GetCutoffU(), GetCutoffV());
+	int2 cutoff_frequency = GetCutoff();
 	wxString label(wxT("Cutoff ")); label << cutoff_frequency.x;
 	cutoff_label->SetLabel(label);
 
-	vis_config->cutoff_frequency = cutoff_frequency;
+	vis_config_change_cutoff_frequency(vis_config, cutoff_frequency);
 	CheckConfig();
 }
 
@@ -714,13 +726,13 @@ void OptionsFrame::OnNumberOfSamplesSlider( wxCommandEvent& WXUNUSED(event) )
 	if(global_meshless_vis_frame == 0 || global_meshless_vis_frame->meshless_vis_canvas == 0) return; //no point in changing any of this if the vis frame is closed
 
 	int2 number_of_samples = make_int2(GetNumberOfSamplesU(), GetNumberOfSamplesV());
-	vis_config_change_number_of_samples(vis_config, false, number_of_samples);	
-	CheckConfig();
+	vis_config_change_number_of_samples(vis_config, number_of_samples);	
 	
 	wxString label(wxT("Number of samples ")); label << number_of_samples.x;
 	number_of_samples_label->SetLabel(label);
 
 	AdjustCutoff();
+	CheckConfig();
 
 	global_meshless_vis_frame->meshless_vis_canvas->create_image(GetNumberOfSamplesU(), GetNumberOfSamplesV());
 }
@@ -779,17 +791,18 @@ void OptionsFrame::OnBlockLengthSlider(wxCommandEvent& WXUNUSED(event))
 	wxString label(wxT("Block length ")); label << block_length;
 	block_length_label->SetLabel(label);
 
-	vis_config_change_fvr_block_length(vis_config, block_length);
+	vis_config->block_length = block_length;
 	CheckConfig();
 	AdjustCutoff();
 }
 
-void OptionsFrame::OnMinimumNumberOfBlocksSlider(wxCommandEvent& WXUNUSED(event))
+void OptionsFrame::OnNumberOfPartialSumsSlider(wxCommandEvent& WXUNUSED(event))
 {
-	int minimum_number_of_blocks = GetMinimumNumberOfBlocks();
-	wxString label(wxT("Min # Blocks ")); label << minimum_number_of_blocks;
-	minimum_number_of_blocks_label->SetLabel(label);
+	int number_of_partial_sums = GetNumberOfPartialSums();
+	wxString label(wxT("Partial Sums ")); label << number_of_partial_sums;
+	number_of_partial_sums_label->SetLabel(label);
 
+	vis_config_change_number_of_partial_sums(vis_config, number_of_partial_sums);
 }
 
 
@@ -836,7 +849,7 @@ BEGIN_EVENT_TABLE(OptionsFrame, wxFrame)
 	EVT_SLIDER(x_rotation_ID, OptionsFrame::OnXRotationSlider)
 	EVT_SLIDER(y_rotation_ID, OptionsFrame::OnYRotationSlider)
 	EVT_SLIDER(block_length_ID, OptionsFrame::OnBlockLengthSlider)
-	EVT_SLIDER(minimum_number_of_blocks_ID, OptionsFrame::OnMinimumNumberOfBlocksSlider)
+	EVT_SLIDER(number_of_partial_sums_ID, OptionsFrame::OnNumberOfPartialSumsSlider)
 
 	EVT_SLIDER(animation_ID, OptionsFrame::OnAnimationSlider)
 	EVT_SLIDER(color_mapping_ID, OptionsFrame::OnColorMappingSlider)

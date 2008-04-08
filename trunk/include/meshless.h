@@ -27,11 +27,12 @@ extern "C"
 {
 #endif
 
-typedef struct
+enum BasisFunctionId
 {
-	int number_of_terms;
-	char* name;
-} Group;
+	SPH,
+	GAUSSIAN,
+	WENDLAND_D3_C2
+};
 
 typedef struct __align__(16)
 {
@@ -41,17 +42,21 @@ typedef struct __align__(16)
 
 typedef struct
 {
-	Constraint* h_constraints, *d_constraints;
-	float*  h_radii,     *d_radii;
+	int number_of_terms, d_number_of_terms;
+	BasisFunctionId basis_function_id;
 
+	Constraint* h_constraints, *d_constraints;
+	float*  h_radii,   *d_radii;
+} Group;
+
+typedef struct
+{
 	Group* groups;
 	int number_of_groups;
 
 } MeshlessDataset;
 
-MeshlessDataset get_simple_meshless_dataset(int number_of_terms, Constraint* h_constraints, float* h_radii, const char* name);
-
-void delete_meshless_dataset_groups(MeshlessDataset meshless_dataset);
+MeshlessDataset get_simple_meshless_dataset(int number_of_terms, Constraint* h_constraints, float* h_radii, BasisFunctionId basis_function_id);
 
 void delete_meshless_dataset(MeshlessDataset meshless_dataset);
 void delete_meshless_datasets(MeshlessDataset* meshless_datasets, int number_of_datasets);

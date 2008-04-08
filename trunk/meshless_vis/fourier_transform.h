@@ -3,8 +3,8 @@
 //         Do not edit it!
 //
 
-
 /*
+
 libMeshlessVis
 Copyright (C) 2008 Andrew Corrigan
 
@@ -21,6 +21,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 */
 
 #ifndef FOURIER_TRANSFORM_H_
@@ -29,19 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "meshless_vis.h"
 #include "meshless.h"
 
-void fourier_transform(MeshlessDataset meshless_dataset, VisConfig* vis_config);
-
-__device__ float fourier_transform_sph(float r);
-__global__ void fourier_transform_sph_half_domain(int first_term, int number_of_terms, MeshlessDataset meshless_dataset, VisConfig vis_config);
-__global__ void fourier_transform_sph_half_domain_no_radii(int first_term, int number_of_terms, MeshlessDataset meshless_dataset, VisConfig vis_config);
-
-__device__ float fourier_transform_gaussian(float r);
-__global__ void fourier_transform_gaussian_half_domain(int first_term, int number_of_terms, MeshlessDataset meshless_dataset, VisConfig vis_config);
-__global__ void fourier_transform_gaussian_half_domain_no_radii(int first_term, int number_of_terms, MeshlessDataset meshless_dataset, VisConfig vis_config);
-
-__device__ float fourier_transform_wendland_d3_c2(float r);
-__global__ void fourier_transform_wendland_d3_c2_half_domain(int first_term, int number_of_terms, MeshlessDataset meshless_dataset, VisConfig vis_config);
-__global__ void fourier_transform_wendland_d3_c2_half_domain_no_radii(int first_term, int number_of_terms, MeshlessDataset meshless_dataset, VisConfig vis_config);
+void fourier_transform(MeshlessDataset* meshless_dataset, VisConfig* vis_config);
 
 
 #endif /*FOURIER_TRANSFORM_H_*/
