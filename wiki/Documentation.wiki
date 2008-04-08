@@ -11,13 +11,14 @@ The code is licensed under the GPL.  If it would be useful to you for the code t
 
 ===Requirements===
   * [http://www.nvidia.com/object/cuda_home.html CUDA]
+  * [http://www.gpgpu.org/developer/cudpp/ CUDPP]
   * [http://www.boost.org/doc/html/boost_math/quaternions.html Boost.Math.Quaternions]
   * [http://glew.sourceforge.net/ GLEW]
   * vis_wx: Hardware OpenGL support for OpenGL >=2.1 and the ARB_texture_float extension
   * vis_wx: [http://www.wxwidgets.org/ wxWidgets 2.8]
   * vis_wx, vis_noninteractive: [http://www.imagemagick.org/Magick++/ Magick++] for vis_wx and vis_noninteractive
-  * CPU: [http://gcc.gnu.org/gcc-4.2/ GCC with OpenMP support] for the CPU library
-  * CPU: [http://www.fftw.org/ Single-precision, multi-threaded, FFTW 3.1.2] for the CPU library
+  * CPU: [http://gcc.gnu.org/gcc-4.2/ GCC with OpenMP support]
+  * CPU: [http://www.fftw.org/ Single-precision, multi-threaded, FFTW 3.1.2]
 
 ===Known issues===
   * SEVERE: This code does not avoid the Windows/Linux/CUDA bug that if the graphics card takes too long to execute a kernel then the code/OS crashes, if the graphics card is being used for a display.  This happens with libMeshlessVis if you turn the settings up too high with respect to how fast your hardware is.
@@ -33,15 +34,10 @@ The code is licensed under the GPL.  If it would be useful to you for the code t
     * Linux: libmeshless_vis64.a
   # Link with the CUDA libraries:
     * Windows:
-      * cuda.lib
-      * cudart.lib
-      * cufft.lib
-      * cutil.lib (from the CUDA sdk)
+      * cuda.lib, cudart.lib, cufft.lib, cutil.lib
    * Linux:
-      * libcuda.a
-      * libcudart.a
-      * libcufft.a
-      * libcutil.a (from the CUDA sdk)
+      * libcuda.a, libcudart.a, libcufft.a, libcutil.a
+  # Link with CUDPP
   # Link with GLEW and OpenGL
 
 ===Using the CPU library in your code===
