@@ -16,7 +16,7 @@ The code is licensed under the GPL.  If it would be useful to you for the code t
   * [http://glew.sourceforge.net/ GLEW]
   * vis_wx: Hardware OpenGL support for OpenGL >=2.1 and the ARB_texture_float extension
   * vis_wx: [http://www.wxwidgets.org/ wxWidgets 2.8]
-  * vis_wx, vis_noninteractive: [http://www.imagemagick.org/Magick++/ Magick++] for vis_wx and vis_noninteractive
+  * vis_wx, vis_noninteractive: [http://www.imagemagick.org/Magick++/ Magick++]
   * CPU: [http://gcc.gnu.org/gcc-4.2/ GCC with OpenMP support]
   * CPU: [http://www.fftw.org/ Single-precision, multi-threaded, FFTW 3.1.2]
 
