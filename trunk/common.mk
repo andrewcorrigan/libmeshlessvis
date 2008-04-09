@@ -65,18 +65,23 @@ FFTW := $(FFTW_INCLUDE_PATH) $(FFTW_LIB_PATH) -lfftw3f -lfftw3f_threads
 
 CUDA := $(CUDA_INCLUDE_PATHS) $(CUDA_LIB_PATHS)
 ifneq ($(cpu), 1)
-	CUDA := $(CUDA) -lcuda -lcudart -lcutil
+	CUDA += -lcuda -lcudart -lcutil
+endif
+
+ifneq ($(cpu), 1)
+	ifeq ($(emu), 1)
+		CUDA += -lcufftemu
+	else
+		CUDA += -lcufft
+	endif
 endif
 
 GLEW := $(GLEW_INCLUDE_PATH) $(GLEW_LIB_PATH) -lGLEW -lGL
 ifeq ($(needwx), 1)
 	WX := $(shell wx-config --libs std,gl --cppflags)
 endif
-ifeq ($(emu), 1)
-	CUDA += -lcufftemu
-else
-	CUDA += -lcufft
-endif
+
+
 
 
 BINDIR := ../bin
