@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="$(CUDA_INC_PATH);../include"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_CONSOLE;_LIBMESHLESSVIS_USE_CPU"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -108,7 +108,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="$(CUDA_INC_PATH);../include"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;_CONSOLE"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;_CONSOLE;_LIBMESHLESSVIS_USE_CPU"
 				RuntimeLibrary="0"
 				OpenMP="true"
 				UsePrecompiledHeader="0"
