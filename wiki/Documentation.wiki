@@ -12,10 +12,10 @@ The code is licensed under the GPL.  If it would be useful to you for the code t
 ===Requirements===
   * [http://www.nvidia.com/object/cuda_home.html CUDA]
   * [http://www.gpgpu.org/developer/cudpp/ CUDPP]
-  * [http://www.boost.org/doc/html/boost_math/quaternions.html Boost.Math.Quaternions]
   * [http://glew.sourceforge.net/ GLEW]
   * vis_wx: Hardware OpenGL support for OpenGL >=2.1 and the ARB_texture_float extension
   * vis_wx: [http://www.wxwidgets.org/ wxWidgets 2.8]
+  * vis_wx: [http://www.boost.org/doc/html/boost_math/quaternions.html Boost.Math.Quaternions]
   * vis_wx, vis_noninteractive: [http://www.imagemagick.org/Magick++/ Magick++]
   * CPU: [http://gcc.gnu.org/gcc-4.2/ GCC with OpenMP support]
   * CPU: [http://www.fftw.org/ Single-precision, multi-threaded, FFTW 3.1.2]
