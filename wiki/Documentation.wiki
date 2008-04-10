@@ -47,6 +47,7 @@ The code is licensed under the GPL.  If it would be useful to you for the code t
     * Linux: libmeshless_vis64_cpu.a
   # Link with FFTW (the single-precision, multi-threaded version)
   # Link with GLEW and OpenGL
+  # When running, make sure to set OMP_NUM_THREADS
 
 ===What's New?===
   * Version 0.4
