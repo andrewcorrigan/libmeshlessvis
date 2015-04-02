@@ -1,0 +1,1 @@
+libMeshlessVis is a CUDA-based library which implements volume visualization techniques for meshless data.  A wxWidgets application is included with the library.
